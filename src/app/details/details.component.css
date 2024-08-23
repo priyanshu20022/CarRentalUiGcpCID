@@ -1,0 +1,13 @@
+.image-container {
+  height: 200px;
+  display: flex;
+}
+
+.placeholder-image {
+  height: 200px;
+  background-color: #ccc;
+}
+
+.red-text {
+  color: red;
+}

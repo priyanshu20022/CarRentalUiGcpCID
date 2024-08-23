@@ -1,0 +1,265 @@
+<app-loading-spinner [isLoading]="isLoading"></app-loading-spinner>
+<div *ngIf="!isLoading" class="card shadow border-0 mt-4 mb-4">
+  <div class="card-header bg-secondary bg-gradient text-light py-4">
+    <div class="row">
+      <div class="col-12 text-center">
+        <h3 class="text-white text-uppercase">{{ product.name }}</h3>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="py-3">
+      <div class="row">
+        <div class="col-6 col-md-2 offset-lg-1 pb-1">
+          <a
+            routerLink="/"
+            class="btn btn-outline-primary bg-gradient mb-5 fw-semibold btn-sm text-uppercase"
+          >
+            <small>Back to home</small>
+          </a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-lg-3 offset-lg-1 text-center mb-3">
+          <div class="image-container">
+            <img
+              *ngIf="product.imageUrl"
+              [src]="product.imageUrl"
+              alt="Product Image"
+              class="card-img-top rounded"
+              [style.height.px]="300"
+              [style.width.px]="300"
+            />
+            <img
+              *ngIf="!product.imageUrl"
+              src="https://placehold.co/500x500/png"
+              alt="Product Image"
+              class="card-img-top rounded"
+              [style.height.px]="300"
+              [style.width.px]="300"
+            />
+          </div>
+        </div>
+        <div class="col-12 col-lg-6 offset-lg-1">
+          <div class="col-12 col-md-6 pb-4">
+            <span class="badge">{{ product.name }}</span>
+          </div>
+
+          <h5 class="fw-semibold text-secondary">
+            {{ product.price | currency : "INR" }}
+            <span class="text-muted">&nbsp;x&nbsp;</span>
+            ({{
+              calculateRentalDuration(startDate, endDate)
+            }}
+            days)
+            <span class="text-muted">=&nbsp;</span>
+            {{
+              product.price *
+                calculateRentalDuration(startDate, endDate)
+                | currency : "INR"
+            }}
+          </h5>
+ 
+          <div class="row pl-2 my-3">
+            <p class="text-secondary lh-sm">
+              {{ product.description }}
+            </p>
+          </div>
+
+            <form [formGroup]="bookingForm" (ngSubmit)="updateDates()">
+              <div class="d-flex text-secondary">
+                <div class="mb-3" >
+                  <label for="pickupLocation" class="form-label"
+                    >Pickup Location</label
+                  >
+                  <select
+                    class="form-control text-secondary"
+                    id="pickupLocation"
+                    formControlName="pickupLocation"
+                  >
+                    <option
+                      *ngFor="let category of locations"
+                      [value]="category.name"
+                    >
+                      {{ category.name }}
+                    </option>
+                  </select>
+                  <div
+                    class="text-danger"
+                    *ngIf="bookingForm.get('pickupLocation')?.errors?.['required'] && (bookingForm.get('pickupLocation')?.dirty || bookingForm.get('pickupLocation')?.touched)"
+                  >
+                    Pickup Location is required.
+                  </div>
+                </div>
+
+                <div class="mb-3 mx-2">
+                  <label for="dropLocation" class="form-label"
+                    >Drop Location</label
+                  >
+                  <select
+                    class="form-control text-secondary"
+                    id="dropLocation"
+                    formControlName="dropLocation"
+                  >
+                    <option
+                      *ngFor="let category of locations"
+                      [value]="category.name"
+                    >
+                      {{ category.name }}
+                    </option>
+                  </select>
+                  <div
+                    *ngIf="
+                      bookingForm.get('dropLocation')?.hasError('required') &&
+                      (bookingForm.get('dropLocation')?.dirty ||
+                        bookingForm.get('dropLocation')?.touched)
+                    "
+                    class="text-danger"
+                  >
+                    Drop Location is required.
+                  </div>
+                </div>
+              </div>
+            </form>
+
+          <div class="form-group text-secondary">
+            <label for="startDate">Start Date:</label>
+            <input
+              type="date"
+              class="form-control text-secondary"
+              id="startDate"
+              [(ngModel)]="startDate"
+              name="startDate"
+              [min]="currentDate"
+              (change)="filterProducts()"
+            />
+          </div>
+
+          <div class="form-group text-secondary">
+            <label for="endDate">End Date:</label>
+            <input
+              type="date"
+              class="form-control text-secondary"
+              id="endDate"
+              [(ngModel)]="endDate"
+              name="endDate"
+              [min]="currentDate"
+              (change)="filterProducts()"
+            />
+          </div>
+
+          <div class="row" *ngIf="isLoggedIn">
+            <div class="col-12 col-md-6 pb-1 mt-3">
+              <button
+                class="btn btn-primary bg-gradient w-100 py-2 text-uppercase fw-semibold"
+                (click)="updateDates()"
+                [disabled]="!bookingForm.valid"
+              >
+                Proceed
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <form (ngSubmit)="postComment()" *ngIf="isLoggedIn">
+      <div class="mb-3">
+        <label for="commentText" class="form-label">Add Review</label>
+        <textarea
+          class="form-control border-dark custom-textarea"
+          id="commentText"
+          rows="2"
+          [(ngModel)]="newCommentText"
+          name="commentText"
+          required
+        ></textarea>
+      </div>
+      <div class="text-end">
+        <button type="submit" class="btn btn-primary">Post Comment</button>
+      </div>
+    </form>
+    <div class="row mt-4" *ngIf="comments.length > 0">
+      <div class="col-12">
+        <h5>Previous Comments</h5>
+        <hr />
+      </div>
+      <div class="col-12">
+        <div class="card mb-2" *ngFor="let comment of comments">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <div>
+                <p class="card-text">{{ comment.text }}</p>
+                <p class="card-text text-muted">
+                  Posted by: {{ comment.author }}
+                </p>
+              </div>
+              <div>
+                <p class="card-text text-muted">Date: {{ comment.date }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Rental Agreement</h5>
+     
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <h4>{{ product.name }}</h4>
+        <h6 class="fw-semibold">
+          {{ product.price | currency : "INR" }}
+          <span class="text-muted">&nbsp;x&nbsp;</span>
+          ({{
+            calculateRentalDuration(startDate, endDate)
+          }}
+          days)
+          <span class="text-muted">=&nbsp;</span>
+          {{
+            product.price *
+              calculateRentalDuration(startDate, endDate)
+              | currency : "INR"
+          }}
+        </h6>
+        <p>Pickup Location: {{ selectedPickupLocation }}</p>
+        <p>Drop Location: {{ selectedDropLocation }}</p>
+        <p>Description: {{ product.description }}</p>
+        <p>Start Date: {{ startDate }}</p>
+        <p>End Date: {{ endDate }}</p>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-dismiss="modal"
+          (click)="closeModal()"
+        >
+          Close
+        </button>
+        <button type="button" class="btn btn-primary" (click)="addToCart()">
+          Accept Agreement
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

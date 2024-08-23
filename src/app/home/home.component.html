@@ -1,0 +1,85 @@
+<app-loading-spinner [isLoading]="isLoading"></app-loading-spinner>
+<div *ngIf="!isLoading" class="row pb-1 pt-3">
+  <div class="col-lg-8">
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Search by name or description"
+      [(ngModel)]="searchQuery"
+      (input)="filterProducts()"
+    />
+  </div>
+
+  <div class="col-lg-4">
+    <select
+      class="form-select"
+      [(ngModel)]="sortBy"
+      (change)="filterProducts()"
+    >
+      <option value="">Sort by</option>
+      <option value="priceLowToHigh">Price: Low to High</option>
+      <option value="priceHighToLow">Price: High to Low</option>
+    </select>
+  </div>
+</div>
+
+<div class="row pb-3">
+  <div class="col-lg-6">
+    <label for="startDate">Start Date:</label>
+    <input type="date" class="form-control" id="startDate" [(ngModel)]="startDate" (change)="filterProducts()" [min]="getCurrentDate()"/>
+  </div>
+  <div class="col-lg-6">
+    <label for="endDate">End Date:</label>
+    <input type="date" class="form-control" id="endDate" [(ngModel)]="endDate" (change)="filterProducts()" [min]="getCurrentDate()"/>
+  </div>
+</div>
+<div class="row pb-3">
+  <div class="col-lg-3 col-sm-6" *ngFor="let product of filteredProducts">
+    <div class="card border-0 p-3 shadow border-top border-5 rounded">
+      <div class="image-container">
+        <img
+          *ngIf="product.imageUrl"
+          [src]="product.imageUrl"
+          alt="Product Image"
+          class="card-img-top rounded"
+          [style.height.px]="200"
+          [style.width.px]="250"
+        />
+        <img
+          *ngIf="!product.imageUrl"
+          src="https://placehold.co/500x500/png"
+          alt="Product Image"
+          class="card-img-top rounded"
+          [style.height.px]="200"
+          [style.width.px]="200"
+        />
+      </div>
+      <div class="card-body pb-0">
+        <div class="pl-1">
+          <p
+            class="card-title h5 text-dark opacity-75 text-uppercase text-center"
+          >
+            {{ product.name }}
+          </p>
+        </div>
+        <div class="pl-1">
+          <p class="text-dark text-opacity-75 text-center">
+            <span
+              >&#8377;{{
+                product.price 
+              }}</span
+            >/day
+          </p>
+        </div>
+
+        <div>
+          <a
+            [routerLink]="['/details', product.id]"
+            class="btn btn-dark bg-gradient border-0 form-control"
+            >Book Now</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

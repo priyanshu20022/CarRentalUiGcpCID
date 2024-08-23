@@ -1,0 +1,178 @@
+<div style="max-width: 500px" class="container mt-5">
+  <div class="card">
+    <div class="card-header">
+      <h4 class="text-center">Register</h4>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="signUpForm" (ngSubmit)="onSignUp()">
+        <div class="mb-3">
+          <label for="fullName" class="form-label">Full Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="fullName"
+            formControlName="name"
+          />
+          <div
+            *ngIf="
+              signUpForm.get('name')?.errors?.['required'] &&
+              signUpForm.get('name')?.touched
+            "
+            class="text-danger"
+          >
+            Full Name is required.
+          </div>
+          <div
+            *ngIf="
+            signUpForm.get('name')?.errors?.['maxlength'] &&
+            signUpForm.get('name')?.touched
+          "
+            class="text-danger"
+          >
+            Full Name should not exceed 50 characters.
+          </div>
+          <div
+            *ngIf="
+                signUpForm.get('name')?.errors?.['pattern'] &&
+                signUpForm.get('name')?.touched
+              "
+            class="text-danger"
+          >
+            Full Name should only contain alphabets.
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            formControlName="email"
+          />
+          <div
+            *ngIf="
+              signUpForm.get('email')?.touched
+            "
+            class="text-danger"
+          >
+            <div *ngIf="signUpForm.get('email')?.errors?.['required']">
+              Email is required.
+            </div>
+            <div
+              *ngIf="
+                signUpForm.get('email')?.errors?.['email'] &&
+                signUpForm.get('email')?.touched
+              "
+            >
+              Please enter a valid email address.
+            </div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="phone" class="form-label">Phone no.</label>
+          <input
+            type="string"
+            class="form-control"
+            id="phone"
+            formControlName="phone"
+          />
+          <div
+            *ngIf="
+              signUpForm.get('phone')?.errors?.['required'] &&
+              signUpForm.get('phone')?.touched
+            "
+            class="text-danger"
+          >
+            Phone number is required.
+          </div>
+          <div
+            *ngIf="
+                signUpForm.get('phone')?.errors?.['pattern'] &&
+                signUpForm.get('phone')?.touched
+              "
+            class="text-danger"
+          >
+            Please enter a valid 10-digit phone number.
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            formControlName="password"
+          />
+          <div
+            *ngIf="
+              
+              signUpForm.get('password')?.touched
+            "
+            class="text-danger"
+          >
+            <div *ngIf="signUpForm.get('password')?.errors?.['required']">
+              Password is required.
+            </div>
+            <div
+              *ngIf="
+                signUpForm.get('password')?.errors?.['minlength'] &&
+                signUpForm.get('password')?.touched
+              "
+            >
+              Password should be at least 8 characters long.
+            </div>
+            <div
+              *ngIf="
+                signUpForm.get('password')?.errors?.['pattern'] &&
+                signUpForm.get('password')?.touched
+              "
+            >
+              Password should contain at least 1 special character, 1 number,
+              and 1 alphabet.
+            </div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="confirmPassword" class="form-label"
+            >Confirm Password</label
+          >
+          <input
+            type="password"
+            class="form-control"
+            id="confirmPassword"
+            formControlName="confirmPassword"
+          />
+          <div
+            *ngIf="
+              
+              signUpForm.get('confirmPassword')?.touched
+            "
+            class="text-danger"
+          >
+            <div
+              *ngIf="signUpForm.get('confirmPassword')?.errors?.['required']"
+            >
+              Confirm Password is required.
+            </div>
+            <div
+              *ngIf="
+                signUpForm.get('confirmPassword')?.value !==
+                  signUpForm.get('password')?.value &&
+                  signUpForm.get('confirmPassword')?.touched
+              "
+            >
+              Confirm Password should match with the Password.
+            </div>
+          </div>
+        </div>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="!signUpForm.valid"
+        >
+          Register
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

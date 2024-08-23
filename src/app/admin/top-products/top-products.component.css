@@ -1,0 +1,16 @@
+.image-container {
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .placeholder-image {
+    height: 200px;
+    background-color: #ccc;
+  }
+  
+  .red-text {
+    color: red;
+  }
+  

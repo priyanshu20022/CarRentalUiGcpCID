@@ -1,0 +1,72 @@
+<div class="row pb-1 pt-3">
+<div class="row pb-3">
+  <div class="col-lg-3 col-sm-6" *ngFor="let product of cartProducts">
+    <div class="card border-0 p-3 shadow border-top border-5 rounded">
+      <div class="image-container">
+        <img
+          *ngIf="product.product.imageUrl"
+          [src]="product.product.imageUrl"
+          alt="Product Image"
+          class="card-img-top rounded"
+          [style.height.px]="200"
+          [style.width.px]="250"
+        />
+        <img
+          *ngIf="!product.product.imageUrl"
+          src="https://placehold.co/500x500/png"
+          alt="Product Image"
+          class="card-img-top rounded"
+          [style.height.px]="200"
+          [style.width.px]="250"
+        />
+      </div>
+      <div class="card-body pb-0">
+        <div class="pl-1">
+          <p
+            class="card-title h5 text-dark opacity-75 text-uppercase text-center"
+          >
+            {{ product.product.name }}
+          </p>
+        </div>
+        <div class="pl-1">
+          <p class="text-dark text-opacity-75 text-center">
+            <span
+              >&#8377;{{
+                product.product.price
+              }}</span
+            >/day
+          </p>
+        </div>
+        <div class="pl-1">
+          <p class="text-dark text-opacity-75 text-center">
+            Start Date: {{product.startDate | date:'dd-MM-yyyy'}}<br>
+              End Date: {{product.endDate | date:'dd-MM-yyyy'}}
+          </p>
+        </div>
+        <div *ngIf="((product.markForInception && !product.returnRequested) || (!product.markForInception && product.returnRequested) || isEndDateLessThanCurrentDate(product.endDate)) && (!product.markForInception)"
+        (click)="markForInception(product)">
+          <a
+            class="btn btn-dark bg-gradient border-0 form-control"
+            >Mark for Inception</a
+          >
+        </div>
+        <div *ngIf="product.markForInception" (click)="markAsReturned(product)">
+          <a
+            class="btn btn-dark bg-gradient border-0 form-control"
+            >Mark as Returned</a
+          >
+        </div>
+        <div class="mt-1">
+          <a
+            class="btn btn-danger bg-gradient border-0 form-control"
+            (click)="deleteCartItem(product.id)"
+            >Cancel Agreement</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="cartProducts.length === 0" class="text-center">
+  <h3>No cars booked at the moment</h3>
+</div>

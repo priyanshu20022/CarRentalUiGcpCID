@@ -1,0 +1,47 @@
+<div class="form-group">
+    <label for="startDate">Start Date:</label>
+    <input type="date" class="form-control" id="startDate" [(ngModel)]="startDate" name="startDate">
+  </div>
+  
+  <div class="form-group">
+    <label for="endDate">End Date:</label>
+    <input type="date" class="form-control" id="endDate" [(ngModel)]="endDate" name="endDate">
+  </div>
+  
+  <button type="button" id="exampleModal"class="btn btn-primary" (click)="updateDates()">Update</button>
+
+<button
+class="btn btn-primary bg-gradient"
+data-bs-toggle="modal"
+data-bs-target="#editModal"
+>
+Edit Dates
+</button>
+<!-- Modal for editing start and end dates -->
+<div class="modal fade" id="editModal" [class.show]="selectedProduct" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Rental Agreement</h5>
+        <button type="button" class="btn-close" aria-label="Close" ></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="startDate" class="form-label">Start Date:</label>
+            <input type="date" class="form-control" id="startDate" [(ngModel)]="newStartDate">
+          </div>
+          <div class="mb-3">
+            <label for="endDate" class="form-label">End Date:</label>
+            <input type="date" class="form-control" id="endDate" [(ngModel)]="newEndDate">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary">Cancel</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeEditModal()">Close</button>
+        <button type="button" class="btn btn-primary" >Save</button>
+      </div>
+    </div>
+  </div>
+</div>

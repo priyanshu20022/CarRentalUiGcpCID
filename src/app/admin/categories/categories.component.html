@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="row pt-4 pb-2">
+    <div class="col-6">
+      <h3 class="text-dark">Delhi NCR Pickup and Drop Locations</h3>
+    </div>
+    <div class="col-6 text-end">
+      <a class="btn btn-dark" routerLink="/category/create">
+        <i class="bi bi-plus-circle"></i> Add New Location
+      </a>
+    </div>
+  </div>
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Location Name</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let category of categories">
+        <td>{{ category.name }}</td>
+        <td>
+          <div>
+            <button (click)="onEdit(category)" class="btn btn-dark me-3">
+              <i class="bi bi-pencil-square"></i> Edit
+            </button>
+            <button (click)="onDelete(category)" class="btn btn-danger">
+              <i class="bi bi-trash3"></i> Delete
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

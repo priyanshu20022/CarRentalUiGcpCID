@@ -1,0 +1,117 @@
+<div class="container mt-5">
+  <div class="card">
+    <div class="card-header">
+      <h4 class="text-center">Update Car</h4>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="productForm" (ngSubmit)="onUpdate()">
+        <div class="row">
+          <div class="col-10">
+            <div class="mb-3">
+              <label for="name" class="form-label">Car Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="name"
+                formControlName="name"
+              />
+              <div
+                *ngIf="
+              productForm.get('name')?.errors?.['required'] &&
+               productForm.get('name')?.touched
+            "
+                class="text-danger"
+              >
+                Car Name is required.
+              </div>
+              <div
+                *ngIf="
+            productForm.get('name')?.errors?.['maxlength'] &&
+            productForm.get('name')?.touched
+          "
+                class="text-danger"
+              >
+                Car Name cannot exceed 100 characters.
+              </div>
+              <div
+                *ngIf="
+                productForm.get('name')?.errors?.['pattern'] &&
+                productForm.get('name')?.touched
+              "
+                class="text-danger"
+              >
+                Car Name should be alphanumeric only.
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="description" class="form-label">Description</label>
+              <input
+                type="text"
+                class="form-control"
+                id="description"
+                formControlName="description"
+              />
+              <div
+                *ngIf="
+              productForm.get('description')?.errors?.['required'] &&
+              productForm.get('description')?.touched
+            "
+                class="text-danger"
+              >
+                Description is required.
+              </div>
+              <div
+                *ngIf="
+            productForm.get('description')?.errors?.['maxlength'] &&
+            productForm.get('description')?.touched
+          "
+                class="text-danger"
+              >
+                Description cannot exceed 255 characters.
+              </div>
+              <div
+                *ngIf="
+                productForm.get('description')?.errors?.['pattern'] &&
+                productForm.get('description')?.touched
+              "
+                class="text-danger"
+              >
+                Description should be alphanumeric only.
+              </div>
+            </div>
+           
+            <div class="mb-3">
+              <label for="price" class="form-label">Price</label>
+              <input
+                type="number"
+                class="form-control"
+                id="price"
+                formControlName="price"
+              />
+              <div
+                *ngIf="
+              productForm.get('price')?.errors?.['required'] &&
+              productForm.get('price')?.touched
+            "
+                class="text-danger"
+              >
+                Price is required.
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-dark">Update</button>
+            <a routerLink="/category" class="ml-3 btn">Back to List</a>
+          </div>
+          <div class="col-2">
+            <img
+              [src]="imageUrl"
+              width="100%"
+              style="border-radius: 5px; border: 1px solid #bbb9b9"
+              alt="Product Image"
+            />
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
